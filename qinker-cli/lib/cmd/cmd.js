@@ -26,18 +26,27 @@ class qinkerCli {
    * @memberof qinkerCli
    */
   filter() {
-    if (this.argv.indexOf("-v") || this.argv.indexOf("-version")) {
+    if (this.argv.indexOf("-v") !== -1  || this.argv.indexOf("-version") !== -1) {
         this.help();
+        return;
+    }
+    if(this.argv.length != 2) {
+        this.argvError()
         return;
     }
     const commands = this.argv[0];
     const option = this.argv[1];
     const isHaveCommand = Object.keys(this.msg.command).indexOf(commands);
 
-    if (!isHaveCommand) this.argvError();
-    const isHaveOption = this.msg.command[commands]
-    console.log(isHaveOption)
-    // if (!isHaveOption) this.argvError();
+    if (!isHaveCommand) {
+        this.argvError();
+        return;
+    }
+    const isHaveOption = this.msg.command[commands].indexOf(option)
+    if (!isHaveOption) {
+        this.argvError();
+        return;
+    }
   }
 
   help() {
