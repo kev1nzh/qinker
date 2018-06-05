@@ -6,7 +6,8 @@ class qinkerCli {
     this.exec = exec;
     this.argv = process.argv.splice(2, process.argv.length);
     this.msg = msg;
-    this.filter() // get error
+    this.filterResult = false;
+    this.filter(); // get error
     this.fetch(); // fetch argv to Function
   }
 
@@ -17,8 +18,15 @@ class qinkerCli {
     console.log("please console -v or -version");
   }
   fetch() {
+    if (!this.filterResult) return;
     const command = this.argv[0];
     const option = this.argv[1];
+    if(command == 'vue') {
+      if(option == 'normal') this.vueNormal()
+    }
+  }
+  vueNormal() {
+    console.log('aaa')
   }
   /**
    * 1、判断是否是help参数，如果是就运行help函数。
@@ -26,27 +34,32 @@ class qinkerCli {
    * @memberof qinkerCli
    */
   filter() {
-    if (this.argv.indexOf("-v") !== -1  || this.argv.indexOf("-version") !== -1) {
-        this.help();
-        return;
+    if (
+      this.argv.indexOf("-v") !== -1 ||
+      this.argv.indexOf("-version") !== -1
+    ) {
+      this.help();
+      return;
     }
-    if(this.argv.length != 2) {
-        this.argvError()
-        return;
+    if (this.argv.length != 2) {
+      this.argvError();
+      return;
     }
     const commands = this.argv[0];
     const option = this.argv[1];
     const isHaveCommand = Object.keys(this.msg.command).indexOf(commands);
 
-    if (!isHaveCommand) {
-        this.argvError();
-        return;
+    if (isHaveCommand === -1) {
+      this.argvError();
+      return;
     }
-    const isHaveOption = this.msg.command[commands].indexOf(option)
-    if (!isHaveOption) {
-        this.argvError();
-        return;
+    const isHaveOption = this.msg.command[commands].indexOf(option);
+    if (isHaveOption === -1) {
+      this.argvError();
+      return;
     }
+
+    this.filterResult = true;
   }
 
   help() {
