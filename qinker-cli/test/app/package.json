@@ -1,0 +1,23 @@
+{
+  "name": "parcel-vue",
+  "version": "1.0.0",
+  "description": "é¶éç½®VUEå¼åæ¨¡æ¿ï¼åºäºParcelå¨æ°æå»º",
+  "author": "cheneyweb <457299596@qq.com>",
+  "main": "main.js",
+  "license": "",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html --public-url /"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "vue-hot-reload-api": "^2.3.0",
+    "vue-router": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^1.0.0",
+    "parcel-bundler": "^1.7.0",
+    "vue": "^2.5.16",
+    "vue-template-compiler": "^2.5.16"
+  }
+}

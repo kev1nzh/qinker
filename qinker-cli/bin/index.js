@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-const Cli = require("../lib/cmd/cmd");
+const Cli = require("../lib/main/main");
 const cli = new Cli();
