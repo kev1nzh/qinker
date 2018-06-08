@@ -1,12 +1,10 @@
-const exec = require("child_process").exec;
+const path = require("path");
 const msg = require("./msg");
-const execFunc = require("./exec");
-const { compileTemp} = require("./file");
+const { compileTemp, compilePage } = require("./file");
 const loader = require("./loader");
-const path = require('path')
+
 class qinkerCli {
   constructor() {
-    this.exec = exec;
     this.argv = process.argv.splice(2, process.argv.length);
     this.msg = msg;
     this.filterResult = false;
@@ -14,7 +12,10 @@ class qinkerCli {
     this.filter(); // get error
     this.fetch(); // fetch argv to Function
   }
-
+  /**
+   * error Function
+   * @memberof qinkerCli
+   */
   argvError() {
     console.log("");
     console.log("you must use command and option.");
@@ -22,25 +23,50 @@ class qinkerCli {
     console.log("please console -v or -version");
   }
   /**
+   *  fecth to all function
    *  1、判断filter函数是否筛选成功。
    *  2、之后根据command参数来分别使用Function。
-   *
-   * @returns fecth to all function
    * @memberof qinkerCli
    */
   fetch() {
     if (!this.filterResult) return;
     const command = this.argv[0];
     const option = this.argv[1];
-    if (command == "vue") {
+    if (command == "createVue") {
       this.vueProject(option);
     }
+    if (command == "createFormat") {
+      this.vueFormat(option);
+    }
   }
+  /**
+   *  构建vue模板function
+   *  读取vue模板的数据后 编译至运行cmd的路径下。
+   * @param {String} projectName
+   * @memberof qinkerCli
+   */
   async vueProject(projectName) {
-    console.log("completed start!");
-    const templateData = await loader()
-    const result = await compileTemp(projectName, templateData)
-    
+    if (!projectName) {
+      this.argvError();
+      return;
+    }
+    console.log("[vue-parcel] completed start!");
+    const templateData = await loader("/template/parcel-vue");
+    const result = await compileTemp(projectName, templateData);
+  }
+  /**
+   *构建vue模板function
+   *  读取vue模板的数据后 编译至运行cmd的路径下。
+   * @param {String} fileName
+   * @memberof qinkerCli
+   */
+  async vueFormat(fileName) {
+    console.log("[vue-format] completed start!");
+    const templateData = await loader("/template/format-vue");
+    const result = await compilePage(
+      fileName,
+      templateData[0].fileData.replace(/index/g, fileName)
+    );
   }
   /**
    * 1、判断是否 帮助 参数 如果是则使用help()

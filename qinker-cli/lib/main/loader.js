@@ -1,7 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 const { localPath } = require("./file");
-const fileBox = [];
+const fileBox = []; //全局array
+/**
+ * 获取文件数据
+ * @param {String} filedir
+ * @returns 文件数据
+ */
 let getFileData = async filedir => {
   return new Promise((resolve, reject) => {
     fs.readFile(filedir, "binary", (err, result) => {
@@ -10,6 +15,12 @@ let getFileData = async filedir => {
     });
   });
 };
+/**
+ *
+ * 获取文件夹下的所有文件
+ * @param {String} filePath
+ * @returns 文件夹下的所有文件
+ */
 let read = async filePath => {
   return new Promise((resolve, reject) => {
     fs.readdir(filePath, (err, files) => {
@@ -18,6 +29,12 @@ let read = async filePath => {
     });
   });
 };
+/**
+ *
+ *  判断是否是文件or文件夹
+ * @param {String} filedir
+ * @returns
+ */
 let isFile = async filedir => {
   return new Promise((resolve, reject) => {
     fs.stat(filedir, (err, stats) => {
@@ -27,7 +44,13 @@ let isFile = async filedir => {
     });
   });
 };
+/**
+ *递归获取param文件夹中的所有文件
+ *
+ * @param {String} filePath
+ */
 let fileDisplay = async filePath => {
+
   const files = await read(filePath);
   for (let i of files) {
     const filedir = path.join(filePath, i);
@@ -39,10 +62,16 @@ let fileDisplay = async filePath => {
     }
   }
 };
+/**
+ *
+ * 获取绝对路径、文件数据和文件名。
+ * @param {String} dirPath
+ * @returns {Array} result
+ */
+let loader = async (dirPath) => {
 
-let loader = async () => {
   const url = path.resolve(
-    __dirname.substring(0, __dirname.length - 9) + "/template/parcel-vue"
+    __dirname.substring(0, __dirname.length - 9) + dirPath
   );
   const fileFoo = await fileDisplay(url);
   const result = [];

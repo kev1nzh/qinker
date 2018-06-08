@@ -1,7 +1,29 @@
 const exec = require("child_process").exec;
 const fs = require("fs");
 
+/**
+ *
+ * 编译单页面函数
+ * @param {String} fileName 文件名
+ * @param {String} file 文件数据
+ */
+let compilePage = async (fileName, file) => {
+  const newPath = localPath() + '/' + fileName + '.vue'
+  await createFile(newPath, file)
+  console.log("-----------------------------");
+  console.log("       completed ok!");
+  console.log("       welcome qinker!");
+  console.log("-----------------------------");
+}
+
+/**
+ *
+ * 获取cmd路径后编译文件夹和文件
+ * @param {String} projectName 项目名
+ * @param {Object} file 文件对象
+ */
 let compileTemp = async (projectName, file) => {
+  
   await createFolder(localPath(), projectName);
   const filePath = localPath() + "/" + projectName;
   await createFolder(filePath, "src");
@@ -30,10 +52,21 @@ let compileTemp = async (projectName, file) => {
   console.log("       welcome qinker!");
   console.log("-----------------------------");
 };
+
+/**
+ * @returns {String} 获取cmd当前路径
+ */
 let localPath = () => {
+
   return process.cwd();
 };
+
+/**
+ *  传入cmd命令，运行函数后调用 已废弃
+ * @param {String} cmdStr
+ */
 let cmdUse = cmdStr => {
+  
   exec(cmdStr, (err, stdout, srderr) => {
     if (err) {
       console.log(srderr);
@@ -42,6 +75,14 @@ let cmdUse = cmdStr => {
     }
   });
 };
+
+/**
+ *
+ * 创建文件夹
+ * @param {String} path
+ * @param {String} name
+ * @returns
+ */
 let createFolder = async (path, name) => {
   return new Promise((resolve, reject) => {
     fs.mkdir(path + "/" + name, err => {
@@ -51,6 +92,13 @@ let createFolder = async (path, name) => {
     });
   });
 };
+/**
+ *
+ * 创建文件
+ * @param {String} path
+ * @param {String} data
+ * @returns
+ */
 let createFile = async (path, data) => {
   return new Promise((resolve, reject) => {
     fs.writeFile(path, data, err => {
@@ -62,9 +110,7 @@ let createFile = async (path, data) => {
 };
 
 module.exports = {
+  compileTemp,
   localPath,
-  createFolder,
-  createFile,
-  cmdUse,
-  compileTemp
+  compilePage
 };
